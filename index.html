@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAGASHI — 和菓子文化継承株式会社</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --washi: #F5F0E8;
+    --ink: #1C1812;
+    --ink-mid: #3D3630;
+    --ink-light: #6B6258;
+    --lacquer: #8B1A1A;
+    --lacquer-light: #B8372A;
+    --gold: #9A7B4F;
+    --gold-light: #C4A47E;
+    --sage: #5A6B52;
+    --cream: #EDE8DC;
+    --cream-deep: #DDD7C8;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--washi);
+    color: var(--ink);
+    overflow-x: hidden;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid rgba(28,24,18,0.12);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 300; letter-spacing: 0.25em;
+    color: var(--ink); text-decoration: none;
+  }
+  .nav-logo span { color: var(--lacquer); }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-size: 0.75rem; letter-spacing: 0.18em;
+    color: var(--ink-light); text-decoration: none;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--lacquer); }
+  .nav-cta {
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    background: var(--ink); color: var(--washi);
+    padding: 0.6rem 1.6rem; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--lacquer); }
+
+  .hero {
+    min-height: 100vh; display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '和';
+    position: absolute; right: -2rem; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 28rem; font-weight: 300;
+    color: rgba(28,24,18,0.04);
+    pointer-events: none; line-height: 1;
+  }
+  .hero-left { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--lacquer); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 2.5rem; height: 0.5px;
+    background: var(--lacquer);
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4.5rem; font-weight: 300; line-height: 1.15;
+    color: var(--ink); margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--lacquer); }
+  .hero-subtitle {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem; font-weight: 300;
+    color: var(--ink-mid); line-height: 1.9;
+    margin-bottom: 2.5rem; max-width: 38ch;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 2rem; }
+  .btn-primary {
+    background: var(--lacquer); color: var(--washi);
+    padding: 0.85rem 2.5rem; font-size: 0.75rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--lacquer-light); }
+  .btn-ghost {
+    font-size: 0.75rem; letter-spacing: 0.12em;
+    color: var(--ink-light); text-decoration: none;
+    border-bottom: 0.5px solid var(--ink-light);
+    padding-bottom: 0.1rem; transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  .hero-right {
+    display: grid; grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto; gap: 1rem;
+    position: relative; z-index: 1;
+  }
+  .brand-card {
+    background: var(--cream); padding: 1.5rem;
+    border-left: 2px solid var(--gold-light);
+    transition: transform 0.2s;
+    cursor: default;
+  }
+  .brand-card:hover { transform: translateY(-2px); }
+  .brand-card.featured {
+    grid-column: span 2;
+    background: var(--ink); color: var(--washi);
+    border-left-color: var(--lacquer);
+    display: flex; align-items: center; gap: 2rem;
+  }
+  .brand-year {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.4rem;
+  }
+  .brand-card.featured .brand-year { color: var(--gold-light); }
+  .brand-name-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.3rem; font-weight: 400; margin-bottom: 0.2rem;
+  }
+  .brand-name-en {
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--ink-light); text-transform: uppercase;
+  }
+  .brand-card.featured .brand-name-en { color: var(--gold-light); }
+  .brand-loc {
+    font-size: 0.72rem; color: var(--ink-light); margin-top: 0.4rem;
+  }
+  .brand-card.featured .brand-loc { color: rgba(245,240,232,0.6); }
+  .featured-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem; font-weight: 300; color: var(--lacquer);
+    line-height: 1; flex-shrink: 0;
+  }
+
+  section { padding: 6rem 4rem; }
+  .section-label {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--lacquer); margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 0.5px; background: var(--cream-deep); max-width: 100%;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--lacquer); }
+
+  .philosophy { background: var(--ink); color: var(--washi); }
+  .philosophy .section-label { color: var(--gold-light); }
+  .philosophy .section-label::after { background: rgba(245,240,232,0.15); }
+  .philosophy-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: start;
+  }
+  .philosophy-text .section-title { color: var(--washi); }
+  .philosophy-body {
+    font-family: 'Noto Serif JP', serif; font-weight: 300;
+    font-size: 0.95rem; color: rgba(245,240,232,0.75);
+    line-height: 2; max-width: 44ch;
+  }
+  .philosophy-pillars { display: flex; flex-direction: column; gap: 0; }
+  .pillar {
+    border-top: 0.5px solid rgba(245,240,232,0.15);
+    padding: 1.5rem 0;
+    display: grid; grid-template-columns: 2.5rem 1fr; gap: 1.5rem;
+    align-items: start;
+  }
+  .pillar:last-child { border-bottom: 0.5px solid rgba(245,240,232,0.15); }
+  .pillar-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; color: var(--lacquer); line-height: 1.3;
+  }
+  .pillar-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem; font-weight: 400; margin-bottom: 0.4rem;
+    color: var(--washi);
+  }
+  .pillar-desc { font-size: 0.82rem; color: rgba(245,240,232,0.6); line-height: 1.8; }
+
+  .how { background: var(--washi); }
+  .process-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin-top: 4rem; border: 0.5px solid var(--cream-deep);
+  }
+  .step {
+    padding: 2.5rem 2rem; border-right: 0.5px solid var(--cream-deep);
+    position: relative;
+  }
+  .step:last-child { border-right: none; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300;
+    color: var(--cream-deep); line-height: 1;
+    margin-bottom: 1.2rem;
+  }
+  .step-icon { font-size: 1.4rem; margin-bottom: 0.8rem; }
+  .step-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem; font-weight: 500;
+    color: var(--ink); margin-bottom: 0.6rem;
+  }
+  .step-desc { font-size: 0.8rem; color: var(--ink-light); line-height: 1.8; }
+  .step-arrow {
+    position: absolute; right: -0.8rem; top: 50%;
+    transform: translateY(-50%);
+    width: 1.6rem; height: 1.6rem;
+    background: var(--lacquer); color: var(--washi);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; z-index: 2;
+  }
+  .step:last-child .step-arrow { display: none; }
+
+  .stats { background: var(--cream); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .stat-item {
+    padding: 3rem 2rem; border-right: 0.5px solid var(--cream-deep); text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 4rem; font-weight: 300; color: var(--lacquer);
+    line-height: 1; margin-bottom: 0.5rem;
+  }
+  .stat-unit { font-size: 1.5rem; color: var(--gold); }
+  .stat-label {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.82rem; color: var(--ink-mid); line-height: 1.6;
+  }
+
+  .portfolio { background: var(--washi); }
+  .portfolio-intro {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    align-items: end; margin-bottom: 4rem;
+  }
+  .brands-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--cream-deep);
+    border: 1px solid var(--cream-deep);
+  }
+  .brand-item {
+    background: var(--washi); padding: 1.8rem 2rem;
+    transition: background 0.2s; cursor: default;
+  }
+  .brand-item:hover { background: var(--cream); }
+  .brand-item-pref {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .brand-item-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.05rem; font-weight: 400; color: var(--ink); margin-bottom: 0.2rem;
+  }
+  .brand-item-name-en {
+    font-size: 0.65rem; letter-spacing: 0.12em;
+    color: var(--ink-light); text-transform: uppercase; margin-bottom: 0.7rem;
+  }
+  .brand-item-since { font-size: 0.7rem; color: var(--ink-light); margin-bottom: 0.6rem; }
+  .brand-specialty {
+    display: inline-block;
+    font-size: 0.65rem; letter-spacing: 0.08em;
+    padding: 0.2rem 0.7rem;
+    background: var(--cream); color: var(--sage);
+    border: 0.5px solid var(--cream-deep);
+  }
+
+  .sellers { background: var(--ink); color: var(--washi); }
+  .sellers-inner { max-width: 56rem; margin: 0 auto; text-align: center; }
+  .sellers .section-label { justify-content: center; }
+  .sellers .section-label::after { display: none; }
+  .sellers .section-title { color: var(--washi); margin-bottom: 1rem; }
+  .sellers-body {
+    font-family: 'Noto Serif JP', serif; font-weight: 300;
+    font-size: 1rem; color: rgba(245,240,232,0.7);
+    line-height: 2; margin-bottom: 2.5rem;
+  }
+  .sellers-criteria {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-bottom: 3rem; text-align: left;
+  }
+  .criterion { border: 0.5px solid rgba(245,240,232,0.15); padding: 1.5rem; }
+  .criterion-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .criterion-title {
+    font-size: 0.82rem; font-weight: 500; color: var(--washi); margin-bottom: 0.4rem;
+    font-family: 'Noto Serif JP', serif;
+  }
+  .criterion-desc { font-size: 0.75rem; color: rgba(245,240,232,0.55); line-height: 1.8; }
+  .contact-form {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: span 2; }
+  .form-label { font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(245,240,232,0.5); }
+  .form-input {
+    background: rgba(245,240,232,0.06);
+    border: 0.5px solid rgba(245,240,232,0.2);
+    color: var(--washi); padding: 0.75rem 1rem;
+    font-family: inherit; font-size: 0.85rem;
+    outline: none; transition: border-color 0.2s; width: 100%;
+  }
+  .form-input:focus { border-color: rgba(245,240,232,0.5); }
+  .form-input::placeholder { color: rgba(245,240,232,0.25); }
+  .form-submit {
+    grid-column: span 2; margin-top: 0.5rem;
+    background: var(--lacquer); color: var(--washi);
+    border: none; padding: 1rem 3rem;
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s; font-family: inherit; width: 100%;
+  }
+  .form-submit:hover { background: var(--lacquer-light); }
+
+  footer {
+    background: var(--ink); border-top: 0.5px solid rgba(245,240,232,0.1);
+    padding: 3rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 300; letter-spacing: 0.25em;
+    color: rgba(245,240,232,0.7);
+  }
+  .footer-logo span { color: var(--lacquer); }
+  .footer-tagline {
+    font-family: 'Noto Serif JP', serif; font-weight: 300;
+    font-size: 0.78rem; color: rgba(245,240,232,0.35); margin-top: 0.2rem;
+  }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-size: 0.7rem; letter-spacing: 0.12em;
+    color: rgba(245,240,232,0.4); text-decoration: none;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: rgba(245,240,232,0.8); }
+  .footer-copy { font-size: 0.68rem; color: rgba(245,240,232,0.3); }
+
+  /* ── TABLET ── */
+  @media (max-width: 1024px) {
+    nav { padding: 1.2rem 2.5rem; }
+    .hero { padding: 7rem 2.5rem 3rem; gap: 2.5rem; }
+    .hero-title { font-size: 3.8rem; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .step:nth-child(2) { border-right: none; }
+    .step:nth-child(2) .step-arrow { display: none; }
+    .step:nth-child(3) { border-top: 0.5px solid var(--cream-deep); }
+    .step:nth-child(4) { border-top: 0.5px solid var(--cream-deep); }
+    .brands-grid { grid-template-columns: 1fr 1fr; }
+    .philosophy-grid { gap: 3rem; }
+    section { padding: 5rem 2.5rem; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 700px) {
+    /* NAV */
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .nav-cta { padding: 0.5rem 1.1rem; font-size: 0.68rem; }
+
+    /* HERO */
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 5.5rem 1.5rem 3rem;
+      gap: 2.5rem; min-height: auto;
+    }
+    .hero::before { font-size: 12rem; opacity: 0.6; right: -1rem; top: 30%; }
+    .hero-eyebrow { font-size: 0.62rem; margin-bottom: 1rem; }
+    .hero-title { font-size: 2.6rem; margin-bottom: 1rem; }
+    .hero-subtitle { font-size: 0.9rem; margin-bottom: 2rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .btn-primary { width: 100%; text-align: center; padding: 0.9rem 1.5rem; }
+
+    .hero-right { grid-template-columns: 1fr; gap: 0.75rem; }
+    .brand-card.featured {
+      flex-direction: column; gap: 0.8rem; padding: 1.2rem;
+    }
+    .featured-num { font-size: 3.5rem; }
+
+    /* SECTIONS */
+    section { padding: 3.5rem 1.5rem; }
+    .section-label { font-size: 0.6rem; margin-bottom: 2rem; }
+    .section-title { font-size: 2rem; }
+
+    /* PHILOSOPHY */
+    .philosophy-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .philosophy-body { font-size: 0.88rem; max-width: 100%; }
+    .pillar { padding: 1.2rem 0; gap: 1rem; }
+    .pillar-desc { font-size: 0.78rem; }
+
+    /* PROCESS */
+    .process-steps { grid-template-columns: 1fr; margin-top: 2.5rem; }
+    .step { border-right: none; border-bottom: 0.5px solid var(--cream-deep); padding: 2rem 1.5rem; }
+    .step:last-child { border-bottom: none; }
+    .step-arrow {
+      display: block !important;
+      right: auto; top: auto;
+      bottom: -0.8rem; left: 50%;
+      transform: translateX(-50%) rotate(90deg);
+    }
+    .step:last-child .step-arrow { display: none !important; }
+    .step-num { font-size: 2.5rem; margin-bottom: 0.8rem; }
+
+    /* STATS */
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-item { padding: 2rem 1rem; border-bottom: 0.5px solid var(--cream-deep); }
+    .stat-item:nth-child(2n) { border-right: none; }
+    .stat-item:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-num { font-size: 2.8rem; }
+    .stat-label { font-size: 0.72rem; }
+
+    /* PORTFOLIO */
+    .portfolio-intro { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+    .brands-grid { grid-template-columns: 1fr; }
+    .brand-item { padding: 1.4rem 1.5rem; }
+
+    /* SELLERS */
+    .sellers-criteria { grid-template-columns: 1fr; gap: 0.75rem; }
+    .criterion { padding: 1.2rem; }
+    .contact-form { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: span 1; }
+    .form-submit { grid-column: span 1; font-size: 0.8rem; padding: 1rem; }
+    .sellers-body { font-size: 0.9rem; }
+
+    /* FOOTER */
+    footer {
+      flex-direction: column; gap: 1.5rem;
+      text-align: center; padding: 2.5rem 1.5rem;
+    }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .footer-copy { margin-top: 0.5rem; }
+  }
+
+  /* ── SMALL MOBILE (375px) ── */
+  @media (max-width: 400px) {
+    .hero-title { font-size: 2.2rem; }
+    .section-title { font-size: 1.75rem; }
+    .stat-num { font-size: 2.4rem; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 0.5px solid var(--cream-deep); }
+    .stat-item:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">W<span>A</span>GASHI</a>
+  <div class="nav-links">
+    <a href="#philosophy">理念</a>
+    <a href="#how">仕組み</a>
+    <a href="#portfolio">ブランド</a>
+    <a href="#sellers">売却相談</a>
+  </div>
+  <a href="#sellers" class="nav-cta">お問い合わせ</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Wagashi Holdings</div>
+    <h1 class="hero-title">
+      和菓子という<br>
+      日本の<em>芸術</em>。
+    </h1>
+    <p class="hero-subtitle">
+      日本全国の名店を買収し、弟子を派遣して経営を継承。<br>
+      和菓子文化の灯を、次の百年へと繋ぎます。
+    </p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-primary">ブランド一覧を見る</a>
+      <a href="#how" class="btn-ghost">仕組みを知る</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="brand-card featured">
+      <div class="featured-num">17,000<span style="font-size:2rem;">+</span></div>
+      <div>
+        <div class="brand-year">Target Market 2025</div>
+        <div class="brand-name-jp">日本の和菓子屋総数</div>
+        <div class="brand-name-en">Wagashi shops across Japan — our mission field</div>
+        <div class="brand-loc">その多くが後継者不在。WAGASHIが守ります。</div>
+      </div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-year">Est. 1887 · 京都</div>
+      <div class="brand-name-jp">紫峯堂</div>
+      <div class="brand-name-en">Shihoudou</div>
+      <div class="brand-loc" style="margin-top:0.4rem; font-size:0.72rem; color:var(--ink-light);">上生菓子 · 138年の老舗</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-year">Est. 1921 · 金沢</div>
+      <div class="brand-name-jp">森乃月</div>
+      <div class="brand-name-en">Morinozuki</div>
+      <div class="brand-loc" style="margin-top:0.4rem; font-size:0.72rem; color:var(--ink-light);">落雁 · 棹菓子</div>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy" id="philosophy">
+  <div class="section-label">Philosophy — 理念</div>
+  <div class="philosophy-grid">
+    <div class="philosophy-text">
+      <h2 class="section-title">
+        失くしてはならない、<br>
+        <em>伝統の味</em>。
+      </h2>
+      <p class="philosophy-body">
+        日本の和菓子屋の約7割が後継者不足に悩んでいます。<br><br>
+        WAGASHIは、長年培われた職人の技と店舗の暖簾を単なる「廃業」から救い出します。M&Aを通じて経営権を引き継ぎ、厳選した弟子職人を派遣。店の名前も、味も、空気感も変えません。ただ、続けます。
+      </p>
+    </div>
+    <div class="philosophy-pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div>
+          <div class="pillar-title">暖簾を守る</div>
+          <div class="pillar-desc">買収後も屋号・レシピ・内装は原則として変更しません。先代が積み上げた信頼がそのままブランド価値です。</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div>
+          <div class="pillar-title">職人を育てる</div>
+          <div class="pillar-desc">WAGASHIが運営する「継承塾」で育てた職人を各店舗へ派遣。先代から直接技術を学ぶ期間を必ず設けます。</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div>
+          <div class="pillar-title">経営を近代化する</div>
+          <div class="pillar-desc">バックオフィス・EC・SNS運用はグループで一括管理。職人は作ることだけに集中できる環境を整備します。</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <div>
+          <div class="pillar-title">ブランドを世界へ</div>
+          <div class="pillar-desc">グループ全体の信用力を活かし、百貨店・海外展示会・インバウンド観光との接点を各ブランドに提供します。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="section-label">Process — 仕組み</div>
+  <h2 class="section-title">M&Aから<em>継承</em>まで。<br>4つのステップ。</h2>
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🔍</div>
+      <div class="step-title">候補店舗の発掘</div>
+      <div class="step-desc">独自ネットワークと全国の地域金融機関と連携し、後継者不在の名店を早期に発見。秘密厳守で初回面談を設定します。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🤝</div>
+      <div class="step-title">M&A・事業承継</div>
+      <div class="step-desc">店舗の評価・交渉・契約までを専任チームが対応。先代ご夫婦が安心して引き渡せるスキームを設計します。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🎓</div>
+      <div class="step-title">弟子の派遣・育成</div>
+      <div class="step-desc">継承塾修了生を派遣し、先代と並んで最低6ヶ月〜2年間修業。味・所作・接客を丸ごと受け継ぎます。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon">🌸</div>
+      <div class="step-title">グループ経営・成長</div>
+      <div class="step-desc">各店はそれぞれの個性を保ちながら、WAGASHIグループとして共通インフラ・PR・販路を活用し続けます。</div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num">21<span class="stat-unit">店</span></div>
+      <div class="stat-label">傘下ブランド数<br>（2025年現在）</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">15<span class="stat-unit">府県</span></div>
+      <div class="stat-label">展開都道府県数<br>北海道〜沖縄</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">94<span class="stat-unit">%</span></div>
+      <div class="stat-label">承継後の営業継続率<br>（3年以上）</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">138<span class="stat-unit">年</span></div>
+      <div class="stat-label">最古ブランドの創業年<br>（紫峯堂 / 1887年）</div>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio" id="portfolio">
+  <div class="section-label">Portfolio — 傘下ブランド</div>
+  <div class="portfolio-intro">
+    <h2 class="section-title">21の<em>暖簾</em>。<br>それぞれの百年。</h2>
+    <p style="font-family:'Noto Serif JP',serif; font-size:0.88rem; color:var(--ink-light); line-height:2; font-weight:300;">
+      各ブランドは独立した個性と歴史を持ちます。グループとして繋がりながら、それぞれの土地で独自の文化を守り続けています。
+    </p>
+  </div>
+  <div class="brands-grid">
+    <div class="brand-item">
+      <div class="brand-item-pref">京都府</div>
+      <div class="brand-item-name">紫峯堂</div>
+      <div class="brand-item-name-en">Shihoudou</div>
+      <div class="brand-item-since">創業 1887年</div>
+      <span class="brand-specialty">上生菓子</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">石川県</div>
+      <div class="brand-item-name">森乃月</div>
+      <div class="brand-item-name-en">Morinozuki</div>
+      <div class="brand-item-since">創業 1921年</div>
+      <span class="brand-specialty">落雁・棹菓子</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">京都府</div>
+      <div class="brand-item-name">辻本屋</div>
+      <div class="brand-item-name-en">Tsujimotoya</div>
+      <div class="brand-item-since">創業 1903年</div>
+      <span class="brand-specialty">おはぎ・求肥</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">東京都</div>
+      <div class="brand-item-name">玉川庵</div>
+      <div class="brand-item-name-en">Tamakawa-an</div>
+      <div class="brand-item-since">創業 1934年</div>
+      <span class="brand-specialty">どら焼き・最中</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">島根県</div>
+      <div class="brand-item-name">出雲本舗</div>
+      <div class="brand-item-name-en">Izumo Honpo</div>
+      <div class="brand-item-since">創業 1898年</div>
+      <span class="brand-specialty">ぜんざい・あん餅</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">新潟県</div>
+      <div class="brand-item-name">雪国菓匠</div>
+      <div class="brand-item-name-en">Yukiguni Kashou</div>
+      <div class="brand-item-since">創業 1952年</div>
+      <span class="brand-specialty">笹団子・柏餅</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">長崎県</div>
+      <div class="brand-item-name">波濤軒</div>
+      <div class="brand-item-name-en">Hatouken</div>
+      <div class="brand-item-since">創業 1911年</div>
+      <span class="brand-specialty">カステラ・長崎菓子</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">北海道</div>
+      <div class="brand-item-name">白樺堂</div>
+      <div class="brand-item-name-en">Shirakabadou</div>
+      <div class="brand-item-since">創業 1963年</div>
+      <span class="brand-specialty">ふやき・豆大福</span>
+    </div>
+    <div class="brand-item">
+      <div class="brand-item-pref">奈良県</div>
+      <div class="brand-item-name">吉野葛月</div>
+      <div class="brand-item-name-en">Yoshinokuzuki</div>
+      <div class="brand-item-since">創業 1875年</div>
+      <span class="brand-specialty">葛菓子・みずまんじゅう</span>
+    </div>
+    <div class="brand-item" style="background:var(--cream); display:flex; align-items:center; justify-content:center; text-align:center; padding:2rem;">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:var(--cream-deep); font-weight:300; line-height:1;">+12</div>
+        <div style="font-size:0.7rem; color:var(--ink-light); letter-spacing:0.12em; margin-top:0.3rem;">MORE BRANDS</div>
+        <a href="#sellers" style="display:block; margin-top:0.8rem; font-size:0.68rem; color:var(--lacquer); text-decoration:none; letter-spacing:0.1em;">全ブランドを見る →</a>
+      </div>
+    </div>
+    <div class="brand-item" style="background:var(--ink); cursor:pointer;" onclick="document.getElementById('sellers').scrollIntoView({behavior:'smooth'})">
+      <div style="color:rgba(245,240,232,0.5); font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem;">Your Brand</div>
+      <div style="font-family:'Noto Serif JP',serif; font-size:1rem; color:var(--washi); margin-bottom:0.3rem;">あなたのお店も、<br>次の世代へ。</div>
+      <div style="font-size:0.7rem; color:var(--lacquer-light); margin-top:0.8rem; letter-spacing:0.1em;">相談する →</div>
+    </div>
+  </div>
+</section>
+
+<section class="sellers" id="sellers">
+  <div class="sellers-inner">
+    <div class="section-label" style="justify-content:center;">For Shop Owners — ご相談</div>
+    <h2 class="section-title">
+      あなたの暖簾を、<br>
+      <em>消さない</em>でください。
+    </h2>
+    <p class="sellers-body">
+      後継者がいない。体力の限界を感じている。でも、廃業だけはしたくない。<br>
+      そんなご夫婦の声に、WAGASHIは真剣に向き合います。<br>
+      秘密厳守・費用無料で初回相談を承ります。
+    </p>
+    <div class="sellers-criteria">
+      <div class="criterion">
+        <div class="criterion-icon">📍</div>
+        <div class="criterion-title">場所は問いません</div>
+        <div class="criterion-desc">都市部・地方問わず全国対応。離島や山間地の店舗も歓迎します。</div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-icon">🏮</div>
+        <div class="criterion-title">規模は問いません</div>
+        <div class="criterion-desc">1日50個売れる小さな店から、百貨店に出店する名店まで。大切なのは「技術と歴史」です。</div>
+      </div>
+      <div class="criterion">
+        <div class="criterion-icon">⏳</div>
+        <div class="criterion-title">時期は問いません</div>
+        <div class="criterion-desc">「まだ迷っている」段階でも構いません。情報収集だけのご相談も歓迎します。</div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label class="form-label">お名前</label>
+        <input type="text" class="form-input" placeholder="山田 花子">
+      </div>
+      <div class="form-group">
+        <label class="form-label">電話番号</label>
+        <input type="tel" class="form-input" placeholder="090-0000-0000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">店舗名</label>
+        <input type="text" class="form-input" placeholder="○○堂">
+      </div>
+      <div class="form-group">
+        <label class="form-label">都道府県</label>
+        <input type="text" class="form-input" placeholder="京都府">
+      </div>
+      <div class="form-group full">
+        <label class="form-label">メッセージ（任意）</label>
+        <textarea class="form-input" rows="3" placeholder="創業年・主力商品・ご状況など、自由にお聞かせください。"></textarea>
+      </div>
+      <button type="submit" class="form-submit" id="submit-btn">
+        無料で相談する
+      </button>
+    </form>
+    <p style="margin-top:1rem; font-size:0.7rem; color:rgba(245,240,232,0.3); text-align:center;">
+      ご相談内容は厳密に守秘義務を設けて管理しております。第三者への開示は一切行いません。
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo">W<span>A</span>GASHI</div>
+    <div class="footer-tagline">Wagashi Holdings, Inc. — 和菓子文化継承株式会社</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">会社概要</a>
+    <a href="#">継承塾</a>
+    <a href="#">採用情報</a>
+    <a href="#">IR情報</a>
+    <a href="#">プレスキット</a>
+  </div>
+  <div class="footer-copy">© 2025 WAGASHI Holdings</div>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = '✓ 送信完了しました。担当者より3営業日以内にご連絡します。';
+  btn.style.background = '#5A6B52';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>

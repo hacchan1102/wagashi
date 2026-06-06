@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAGASHI — 和菓子文化継承株式会社</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --washi:#F5F0E8;--ink:#1C1812;--ink-mid:#3D3630;--ink-light:#6B6258;
+  --lacquer:#8B1A1A;--lacquer-light:#B8372A;--gold:#9A7B4F;--gold-light:#C4A47E;
+  --sage:#5A6B52;--cream:#EDE8DC;--cream-deep:#DDD7C8;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--washi);color:var(--ink);overflow-x:hidden;cursor:none}
+
+/* ── CUSTOM CURSOR ── */
+.cursor{position:fixed;width:10px;height:10px;background:var(--lacquer);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,width .3s,height .3s,background .3s}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,26,26,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease-out,width .3s,height .3s,border-color .3s}
+body:has(a:hover) .cursor,.cursor.active{width:6px;height:6px}
+body:has(a:hover) .cursor-ring,.cursor-ring.active{width:54px;height:54px;border-color:rgba(139,26,26,.25)}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:var(--ink);overflow:hidden}
+.loader-inner{position:relative;z-index:1;text-align:center}
+.loader-logo{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;letter-spacing:.4em;color:var(--washi);overflow:hidden}
+.loader-logo span{display:inline-block;transform:translateY(100%);animation:slideUp .8s cubic-bezier(.22,1,.36,1) forwards}
+.loader-logo span:nth-child(1){animation-delay:.1s}
+.loader-logo span:nth-child(2){color:var(--lacquer);animation-delay:.2s}
+.loader-logo span:nth-child(3){animation-delay:.3s}
+.loader-logo span:nth-child(4){animation-delay:.4s}
+.loader-logo span:nth-child(5){animation-delay:.5s}
+.loader-logo span:nth-child(6){animation-delay:.6s}
+.loader-sub{font-size:.65rem;letter-spacing:.35em;color:rgba(245,240,232,.4);margin-top:1rem;opacity:0;animation:fadeIn .6s .9s ease forwards}
+.loader-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--lacquer);width:0;animation:loadBar 1.4s .3s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes slideUp{to{transform:translateY(0)}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes loadBar{to{width:100%}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:2rem 4rem;transition:padding .4s,background .4s,border-color .4s;border-bottom:.5px solid transparent}
+nav.scrolled{padding:1.2rem 4rem;background:rgba(245,240,232,.96);backdrop-filter:blur(12px);border-color:rgba(28,24,18,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:.3em;color:var(--washi);text-decoration:none;transition:color .3s}
+nav.scrolled .nav-logo{color:var(--ink)}
+.nav-logo span{color:var(--lacquer)}
+.nav-links{display:flex;gap:3rem}
+.nav-links a{font-size:.65rem;letter-spacing:.22em;color:rgba(245,240,232,.7);text-decoration:none;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-.3rem;left:0;width:0;height:.5px;background:var(--lacquer);transition:width .3s}
+.nav-links a:hover::after{width:100%}
+nav.scrolled .nav-links a{color:var(--ink-light)}
+nav.scrolled .nav-links a:hover{color:var(--ink)}
+.nav-cta{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;border:.5px solid rgba(245,240,232,.5);color:var(--washi);padding:.55rem 1.5rem;text-decoration:none;transition:all .3s}
+.nav-cta:hover{background:var(--lacquer);border-color:var(--lacquer)}
+nav.scrolled .nav-cta{border-color:var(--ink);color:var(--ink)}
+nav.scrolled .nav-cta:hover{background:var(--lacquer);border-color:var(--lacquer);color:var(--washi)}
+
+/* ── HERO ── */
+.hero{height:100vh;min-height:700px;background:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;padding:0 4rem 5rem;position:relative;overflow:hidden}
+.hero-bg-text{position:absolute;right:-4rem;top:50%;transform:translateY(-50%);font-family:'Noto Serif JP',serif;font-size:35vw;font-weight:200;color:rgba(245,240,232,.03);pointer-events:none;line-height:1;white-space:nowrap}
+.hero-eyebrow{font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-light);margin-bottom:2rem;opacity:0;transform:translateY(20px);transition:all .8s .2s cubic-bezier(.22,1,.36,1)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,8rem);font-weight:300;line-height:1.05;color:var(--washi);margin-bottom:2.5rem;overflow:hidden}
+.hero-title-line{display:block;transform:translateY(110%);transition:transform 1s cubic-bezier(.22,1,.36,1)}
+.hero-title em{font-style:italic;color:var(--lacquer)}
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;opacity:0;transform:translateY(20px);transition:all .8s .8s cubic-bezier(.22,1,.36,1)}
+.hero-sub{font-family:'Noto Serif JP',serif;font-size:.95rem;font-weight:300;color:rgba(245,240,232,.6);line-height:1.9;max-width:36ch}
+.hero-scroll{display:flex;flex-direction:column;align-items:center;gap:.6rem;color:rgba(245,240,232,.4);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase}
+.hero-scroll-line{width:.5px;height:60px;background:linear-gradient(to bottom,rgba(245,240,232,.4),transparent);animation:scrollLine 1.8s ease infinite}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.hero.revealed .hero-eyebrow,.hero.revealed .hero-bottom{opacity:1;transform:translateY(0)}
+.hero.revealed .hero-title-line{transform:translateY(0)}
+.hero.revealed .hero-title-line:nth-child(2){transition-delay:.15s}
+
+/* ── MARQUEE ── */
+.marquee-wrap{background:var(--lacquer);padding:.7rem 0;overflow:hidden;white-space:nowrap}
+.marquee-track{display:inline-flex;animation:marquee 18s linear infinite}
+.marquee-item{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,240,232,.85);padding:0 3rem}
+.marquee-sep{color:rgba(245,240,232,.4)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.stagger-1{transition-delay:.1s}.stagger-2{transition-delay:.2s}.stagger-3{transition-delay:.3s}.stagger-4{transition-delay:.4s}
+
+/* ── SECTION COMMON ── */
+section{padding:7rem 4rem}
+.section-eyebrow{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--lacquer);display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.section-eyebrow::before{content:'';width:2rem;height:.5px;background:var(--lacquer)}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:300;line-height:1.2;margin-bottom:2rem}
+.section-title em{font-style:italic;color:var(--lacquer)}
+
+/* ── PHILOSOPHY ── */
+.philosophy{background:var(--ink);color:var(--washi)}
+.philosophy .section-eyebrow{color:var(--gold-light)}
+.philosophy .section-eyebrow::before{background:var(--gold-light)}
+.philosophy-layout{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start}
+.philosophy .section-title{color:var(--washi)}
+.philosophy-body{font-family:'Noto Serif JP',serif;font-size:.92rem;font-weight:300;color:rgba(245,240,232,.65);line-height:2.1;max-width:42ch}
+.pillars{margin-top:4rem}
+.pillar-item{display:grid;grid-template-columns:3rem 1fr;gap:1.5rem;align-items:start;border-top:.5px solid rgba(245,240,232,.1);padding:1.5rem 0}
+.pillar-item:last-child{border-bottom:.5px solid rgba(245,240,232,.1)}
+.pillar-n{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--lacquer);line-height:1.4}
+.pillar-t{font-family:'Noto Serif JP',serif;font-size:.88rem;font-weight:400;color:var(--washi);margin-bottom:.35rem}
+.pillar-d{font-size:.75rem;color:rgba(245,240,232,.5);line-height:1.85}
+
+/* ── PROCESS ── */
+.process{background:var(--cream)}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:5rem;border:.5px solid var(--cream-deep)}
+.process-step{padding:2.5rem 2rem;border-right:.5px solid var(--cream-deep);position:relative}
+.process-step:last-child{border-right:none}
+.step-n{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--cream-deep);line-height:1;margin-bottom:1.5rem}
+.step-icon{font-size:1.2rem;margin-bottom:.8rem}
+.step-t{font-family:'Noto Serif JP',serif;font-size:.88rem;font-weight:500;color:var(--ink);margin-bottom:.6rem}
+.step-d{font-size:.75rem;color:var(--ink-light);line-height:1.9}
+.step-arrow{position:absolute;right:-.85rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;background:var(--lacquer);color:var(--washi);display:flex;align-items:center;justify-content:center;font-size:.65rem;z-index:2}
+.process-step:last-child .step-arrow{display:none}
+
+/* ── STATS ── */
+.stats{background:var(--ink);color:var(--washi)}
+.stats .section-eyebrow{color:var(--gold-light)}
+.stats .section-eyebrow::before{background:var(--gold-light)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:4rem;border:.5px solid rgba(245,240,232,.1)}
+.stat-box{padding:3.5rem 2.5rem;border-right:.5px solid rgba(245,240,232,.1);text-align:center}
+.stat-box:last-child{border-right:none}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:4.5rem;font-weight:300;color:var(--lacquer);line-height:1;margin-bottom:.5rem}
+.stat-unit{font-size:1.6rem;color:var(--gold-light)}
+.stat-label{font-family:'Noto Serif JP',serif;font-size:.75rem;color:rgba(245,240,232,.5);line-height:1.7}
+
+/* ── BRANDS HORIZONTAL SCROLL ── */
+.portfolio{background:var(--washi);padding:7rem 0}
+.portfolio-head{padding:0 4rem;margin-bottom:4rem}
+.portfolio-scroll-wrap{overflow:hidden;position:relative}
+.portfolio-scroll-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:8rem;background:linear-gradient(to right,transparent,var(--washi));pointer-events:none;z-index:2}
+.portfolio-track{display:flex;gap:1px;background:var(--cream-deep);cursor:grab;user-select:none;will-change:transform}
+.portfolio-track:active{cursor:grabbing}
+.brand-card-h{flex:0 0 280px;background:var(--washi);padding:2.2rem 2rem;transition:background .25s}
+.brand-card-h:hover{background:var(--cream)}
+.bch-pref{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.bch-name{font-family:'Noto Serif JP',serif;font-size:1.1rem;font-weight:400;color:var(--ink);margin-bottom:.15rem}
+.bch-en{font-size:.6rem;letter-spacing:.14em;color:var(--ink-light);text-transform:uppercase;margin-bottom:.8rem}
+.bch-since{font-size:.68rem;color:var(--ink-light);margin-bottom:.7rem}
+.bch-tag{display:inline-block;font-size:.6rem;padding:.2rem .7rem;background:var(--cream);color:var(--sage);border:.5px solid var(--cream-deep)}
+.portfolio-hint{padding:1.5rem 4rem 0;font-size:.65rem;letter-spacing:.15em;color:var(--ink-light);text-transform:uppercase;display:flex;align-items:center;gap:.8rem}
+.portfolio-hint::before{content:'';width:1.5rem;height:.5px;background:var(--ink-light)}
+
+/* ── SELLERS ── */
+.sellers{background:var(--ink);color:var(--washi)}
+.sellers .section-eyebrow{color:var(--gold-light)}
+.sellers .section-eyebrow::before{background:var(--gold-light)}
+.sellers-layout{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start;margin-top:4rem}
+.sellers-left .section-title{color:var(--washi)}
+.sellers-left p{font-family:'Noto Serif JP',serif;font-size:.9rem;font-weight:300;color:rgba(245,240,232,.6);line-height:2.1;margin-bottom:2.5rem}
+.criteria{display:flex;flex-direction:column;gap:0}
+.criterion{border-top:.5px solid rgba(245,240,232,.1);padding:1.2rem 0;display:flex;gap:1.2rem;align-items:flex-start}
+.criterion:last-child{border-bottom:.5px solid rgba(245,240,232,.1)}
+.crit-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.crit-t{font-family:'Noto Serif JP',serif;font-size:.82rem;font-weight:400;color:var(--washi);margin-bottom:.25rem}
+.crit-d{font-size:.72rem;color:rgba(245,240,232,.45);line-height:1.8}
+.form-wrap{background:rgba(245,240,232,.04);border:.5px solid rgba(245,240,232,.1);padding:2.5rem}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--washi);margin-bottom:1.5rem;letter-spacing:.05em}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.fg{display:flex;flex-direction:column;gap:.3rem}
+.fg.full{grid-column:span 2}
+.fg label{font-size:.6rem;letter-spacing:.15em;color:rgba(245,240,232,.4);text-transform:uppercase}
+.fg input,.fg textarea{background:rgba(245,240,232,.05);border:none;border-bottom:.5px solid rgba(245,240,232,.2);color:var(--washi);padding:.7rem 0;font-family:inherit;font-size:.85rem;outline:none;transition:border-color .25s;width:100%}
+.fg input:focus,.fg textarea:focus{border-color:rgba(245,240,232,.6)}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(245,240,232,.2)}
+.fg textarea{resize:none}
+.form-submit{grid-column:span 2;margin-top:.5rem;background:var(--lacquer);color:var(--washi);border:none;padding:1rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:none;transition:background .25s;font-family:inherit;width:100%}
+.form-submit:hover{background:var(--lacquer-light)}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);border-top:.5px solid rgba(245,240,232,.08);padding:3rem 4rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;letter-spacing:.3em;color:rgba(245,240,232,.6)}
+.footer-logo span{color:var(--lacquer)}
+.footer-sub{font-size:.62rem;color:rgba(245,240,232,.28);margin-top:.25rem;font-family:'Noto Serif JP',serif;font-weight:300}
+.footer-links{display:flex;gap:2rem;justify-content:center}
+.footer-links a{font-size:.6rem;letter-spacing:.14em;color:rgba(245,240,232,.35);text-decoration:none;text-transform:uppercase;transition:color .25s}
+.footer-links a:hover{color:rgba(245,240,232,.8)}
+.footer-copy{font-size:.6rem;color:rgba(245,240,232,.25);text-align:right}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  nav{padding:1.5rem 2.5rem}
+  nav.scrolled{padding:1rem 2.5rem}
+  .hero{padding:0 2.5rem 4rem}
+  section{padding:5rem 2.5rem}
+  .philosophy-layout,.sellers-layout{grid-template-columns:1fr;gap:3rem}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-step:nth-child(2){border-right:none}
+  .process-step:nth-child(2) .step-arrow{display:none}
+  .process-step:nth-child(3),.process-step:nth-child(4){border-top:.5px solid var(--cream-deep)}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-box{border-bottom:.5px solid rgba(245,240,232,.1)}
+  .stat-box:nth-child(2n){border-right:none}
+  .stat-box:nth-last-child(-n+2){border-bottom:none}
+  footer{grid-template-columns:1fr;gap:1.5rem;text-align:center}
+  .footer-copy{text-align:center}
+  .footer-links{justify-content:center}
+  .portfolio{padding:5rem 0}
+}
+@media(max-width:700px){
+  nav{padding:1rem 1.5rem}
+  nav.scrolled{padding:.9rem 1.5rem}
+  .nav-links{display:none}
+  .nav-cta{padding:.45rem 1rem;font-size:.6rem}
+  .hero{padding:0 1.5rem 3.5rem;min-height:600px}
+  .hero-bg-text{font-size:55vw}
+  section{padding:4rem 1.5rem}
+  .process-grid{grid-template-columns:1fr}
+  .process-step{border-right:none;border-bottom:.5px solid var(--cream-deep)}
+  .process-step:last-child{border-bottom:none}
+  .process-step .step-arrow{display:none!important}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-box{padding:2rem 1rem}
+  .stat-num{font-size:3rem}
+  .portfolio-head{padding:0 1.5rem}
+  .brand-card-h{flex:0 0 230px}
+  .sellers-layout{gap:2.5rem}
+  .form-grid{grid-template-columns:1fr}
+  .fg.full,.form-submit{grid-column:span 1}
+  .portfolio-hint{padding:1.2rem 1.5rem 0}
+  .portfolio{padding:4rem 0}
+  footer{padding:2.5rem 1.5rem}
+}
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:1fr}
+  .stat-box{border-right:none;border-bottom:.5px solid rgba(245,240,232,.1)}
+  .stat-box:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <span>W</span><span>A</span><span>G</span><span>A</span><span>S</span><span>H</span><span>I</span>
+    </div>
+    <div class="loader-sub">和菓子文化継承株式会社</div>
+  </div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">W<span>A</span>GASHI</a>
+  <div class="nav-links">
+    <a href="#philosophy">理念</a>
+    <a href="#process">仕組み</a>
+    <a href="#portfolio">ブランド</a>
+    <a href="#sellers">売却相談</a>
+  </div>
+  <a href="#sellers" class="nav-cta">お問い合わせ</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-text">和</div>
+  <div class="hero-eyebrow">Wagashi Holdings — 和菓子文化継承</div>
+  <h1 class="hero-title">
+    <span class="hero-title-line">和菓子という</span>
+    <span class="hero-title-line">日本の<em>芸術</em>。</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">
+      日本が誇る和菓子文化の灯を、<br>次の百年へと繋ぎます。
+    </p>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">M&amp;A <span class="marquee-sep">·</span> 事業承継</span>
+    <span class="marquee-item">弟子の派遣 <span class="marquee-sep">·</span> 育成</span>
+    <span class="marquee-item">暖簾を守る <span class="marquee-sep">·</span> 次世代へ</span>
+    <span class="marquee-item">全国21ブランド <span class="marquee-sep">·</span> 15都道府県</span>
+    <span class="marquee-item">赤字・借入OK <span class="marquee-sep">·</span> 全国対応</span>
+    <span class="marquee-item">M&amp;A <span class="marquee-sep">·</span> 事業承継</span>
+    <span class="marquee-item">弟子の派遣 <span class="marquee-sep">·</span> 育成</span>
+    <span class="marquee-item">暖簾を守る <span class="marquee-sep">·</span> 次世代へ</span>
+    <span class="marquee-item">全国21ブランド <span class="marquee-sep">·</span> 15都道府県</span>
+    <span class="marquee-item">赤字・借入OK <span class="marquee-sep">·</span> 全国対応</span>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="section-eyebrow reveal">Philosophy — 理念</div>
+  <div class="philosophy-layout">
+    <div>
+      <h2 class="section-title reveal">
+        失くしてはならない、<br><em>伝統の味</em>。
+      </h2>
+      <p class="philosophy-body reveal stagger-1">
+        日本の和菓子屋の約7割が後継者不足に悩んでいます。<br><br>
+        WAGASHIは、長年培われた職人の技と店舗の暖簾を単なる「廃業」から救い出します。M&Aを通じて経営権を引き継ぎ、厳選した弟子職人を派遣。店の名前も、味も、空気感も変えません。ただ、続けます。
+      </p>
+    </div>
+    <div class="pillars reveal-right">
+      <div class="pillar-item">
+        <div class="pillar-n">01</div>
+        <div><div class="pillar-t">暖簾を守る</div><div class="pillar-d">買収後も屋号・レシピ・内装は原則として変更しません。先代が積み上げた信頼がそのままブランド価値です。</div></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-n">02</div>
+        <div><div class="pillar-t">職人を育てる</div><div class="pillar-d">WAGASHIが運営する「継承塾」で育てた職人を各店舗へ派遣。先代から直接技術を学ぶ期間を必ず設けます。</div></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-n">03</div>
+        <div><div class="pillar-t">経営を近代化する</div><div class="pillar-d">バックオフィス・EC・SNS運用はグループで一括管理。職人は作ることだけに集中できる環境を整備します。</div></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-n">04</div>
+        <div><div class="pillar-t">ブランドを世界へ</div><div class="pillar-d">グループ全体の信用力を活かし、百貨店・海外展示会・インバウンド観光との接点を各ブランドに提供します。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-eyebrow reveal">Process — 仕組み</div>
+  <h2 class="section-title reveal">M&Aから<em>勇退</em>まで。<br>4つのステップ。</h2>
+  <div class="process-grid">
+    <div class="process-step reveal stagger-1">
+      <div class="step-n">01</div>
+      <div class="step-icon">🤝</div>
+      <div class="step-t">M&A・事業承継</div>
+      <div class="step-d">先代が勇退できるように、資金面・経営面からWAGASHIが全力で経営支援を行います。先代ご夫婦が安心して引き渡せるスキームを、一件一件丁寧に設計します。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="process-step reveal stagger-2">
+      <div class="step-n">02</div>
+      <div class="step-icon">🎓</div>
+      <div class="step-t">弟子の派遣・育成</div>
+      <div class="step-d">継承塾修了生を派遣し、先代と並んで最低6ヶ月〜2年間修業。三たて・さしすせそはもちろんのこと、味・所作・接客を丸ごと受け継ぎます。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="process-step reveal stagger-3">
+      <div class="step-n">03</div>
+      <div class="step-icon">🏯</div>
+      <div class="step-t">グループ経営</div>
+      <div class="step-d">各店はそれぞれの個性と暖簾を保ちながら、WAGASHIグループとして共通インフラ・PR・販路を活用。職人が「作ること」だけに集中できる環境を整備します。</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="process-step reveal stagger-4">
+      <div class="step-n">04</div>
+      <div class="step-icon">🌸</div>
+      <div class="step-t">勇退・成長</div>
+      <div class="step-d">先代が勇退後も生活費の資金面サポートを継続。HDとしてインバウンド需要・固定客の獲得を推進し、老舗の味をさらなる高みへと成長させます。</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="section-eyebrow reveal">Numbers — 数字で見る</div>
+  <div class="stats-grid">
+    <div class="stat-box reveal stagger-1">
+      <div class="stat-num"><span class="counter" data-target="21">0</span><span class="stat-unit">店</span></div>
+      <div class="stat-label">傘下ブランド数<br>（2025年現在）</div>
+    </div>
+    <div class="stat-box reveal stagger-2">
+      <div class="stat-num"><span class="counter" data-target="15">0</span><span class="stat-unit">府県</span></div>
+      <div class="stat-label">展開都道府県数<br>北海道〜沖縄</div>
+    </div>
+    <div class="stat-box reveal stagger-3">
+      <div class="stat-num"><span class="counter" data-target="94">0</span><span class="stat-unit">%</span></div>
+      <div class="stat-label">承継後の営業継続率<br>（3年以上）</div>
+    </div>
+    <div class="stat-box reveal stagger-4">
+      <div class="stat-num"><span class="counter" data-target="138">0</span><span class="stat-unit">年</span></div>
+      <div class="stat-label">最古ブランドの創業年<br>（紫峯堂 / 1887年）</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-head">
+    <div class="section-eyebrow reveal">Portfolio — 傘下ブランド</div>
+    <h2 class="section-title reveal">21の<em>暖簾</em>。<br>それぞれの百年。</h2>
+  </div>
+  <div class="portfolio-scroll-wrap">
+    <div class="portfolio-track" id="portfolioTrack">
+      <div class="brand-card-h"><div class="bch-pref">京都府</div><div class="bch-name">紫峯堂</div><div class="bch-en">Shihoudou</div><div class="bch-since">創業 1887年</div><span class="bch-tag">上生菓子</span></div>
+      <div class="brand-card-h"><div class="bch-pref">石川県</div><div class="bch-name">森乃月</div><div class="bch-en">Morinozuki</div><div class="bch-since">創業 1921年</div><span class="bch-tag">落雁・棹菓子</span></div>
+      <div class="brand-card-h"><div class="bch-pref">京都府</div><div class="bch-name">辻本屋</div><div class="bch-en">Tsujimotoya</div><div class="bch-since">創業 1903年</div><span class="bch-tag">おはぎ・求肥</span></div>
+      <div class="brand-card-h"><div class="bch-pref">東京都</div><div class="bch-name">玉川庵</div><div class="bch-en">Tamakawa-an</div><div class="bch-since">創業 1934年</div><span class="bch-tag">どら焼き・最中</span></div>
+      <div class="brand-card-h"><div class="bch-pref">島根県</div><div class="bch-name">出雲本舗</div><div class="bch-en">Izumo Honpo</div><div class="bch-since">創業 1898年</div><span class="bch-tag">ぜんざい・あん餅</span></div>
+      <div class="brand-card-h"><div class="bch-pref">新潟県</div><div class="bch-name">雪国菓匠</div><div class="bch-en">Yukiguni Kashou</div><div class="bch-since">創業 1952年</div><span class="bch-tag">笹団子・柏餅</span></div>
+      <div class="brand-card-h"><div class="bch-pref">長崎県</div><div class="bch-name">波濤軒</div><div class="bch-en">Hatouken</div><div class="bch-since">創業 1911年</div><span class="bch-tag">カステラ・長崎菓子</span></div>
+      <div class="brand-card-h"><div class="bch-pref">北海道</div><div class="bch-name">白樺堂</div><div class="bch-en">Shirakabadou</div><div class="bch-since">創業 1963年</div><span class="bch-tag">ふやき・豆大福</span></div>
+      <div class="brand-card-h"><div class="bch-pref">奈良県</div><div class="bch-name">吉野葛月</div><div class="bch-en">Yoshinokuzuki</div><div class="bch-since">創業 1875年</div><span class="bch-tag">葛菓子・みずまんじゅう</span></div>
+      <div class="brand-card-h"><div class="bch-pref">福岡県</div><div class="bch-name">博多葛花</div><div class="bch-en">Hakata Kuzuhana</div><div class="bch-since">創業 1941年</div><span class="bch-tag">葛切り・羊羹</span></div>
+      <div class="brand-card-h"><div class="bch-pref">愛知県</div><div class="bch-name">尾張松月</div><div class="bch-en">Owari Shōgetsu</div><div class="bch-since">創業 1928年</div><span class="bch-tag">ういろう・どら焼き</span></div>
+      <div class="brand-card-h" style="background:var(--ink);flex:0 0 280px"><div class="bch-pref" style="color:var(--gold-light)">Your Brand</div><div class="bch-name" style="color:var(--washi);font-size:.95rem;margin-top:.5rem">あなたのお店も、<br>次の世代へ。</div><div style="margin-top:1.5rem;font-size:.65rem;color:var(--lacquer-light);letter-spacing:.1em">相談する →</div></div>
+    </div>
+  </div>
+  <div class="portfolio-hint reveal">← ドラッグしてスクロール</div>
+</section>
+
+<!-- SELLERS -->
+<section class="sellers" id="sellers">
+  <div class="section-eyebrow reveal">For Shop Owners — ご相談</div>
+  <div class="sellers-layout">
+    <div class="sellers-left">
+      <h2 class="section-title reveal">あなたの暖簾を、<br><em>消さない</em>でください。</h2>
+      <p class="reveal stagger-1">後継者がいない。体力の限界を感じている。でも、廃業だけはしたくない。そんなご夫婦の声に、WAGASHIは真剣に向き合います。秘密厳守・費用無料で初回相談を承ります。</p>
+      <div class="criteria reveal stagger-2">
+        <div class="criterion"><div class="crit-icon">📍</div><div><div class="crit-t">日本全国、対応します</div><div class="crit-d">北海道から沖縄まで、離島・山間地も含め全国どこでも対応。地元を離れずに承継できます。</div></div></div>
+        <div class="criterion"><div class="crit-icon">🏮</div><div><div class="crit-t">赤字・債務超過・借入もOK</div><div class="crit-d">経営状況は問いません。大切なのは「技術と歴史」です。</div></div></div>
+        <div class="criterion"><div class="crit-icon">⏳</div><div><div class="crit-t">1ヶ月以内〜3年後でもOK</div><div class="crit-d">急いでいる方も、じっくり考えたい方も。タイムラインはご要望に合わせて柔軟に設計します。</div></div></div>
+      </div>
+    </div>
+    <div class="form-wrap reveal-right">
+      <div class="form-title">無料相談フォーム</div>
+      <form class="form-grid" onsubmit="handleSubmit(event)">
+        <div class="fg"><label>お名前</label><input type="text" placeholder="山田 花子"></div>
+        <div class="fg"><label>電話番号</label><input type="tel" placeholder="090-0000-0000"></div>
+        <div class="fg"><label>店舗名</label><input type="text" placeholder="○○堂"></div>
+        <div class="fg"><label>都道府県</label><input type="text" placeholder="京都府"></div>
+        <div class="fg full"><label>メッセージ（任意）</label><textarea rows="3" placeholder="創業年・主力商品・ご状況など"></textarea></div>
+        <button type="submit" class="form-submit" id="submit-btn">無料で相談する</button>
+      </form>
+      <p style="margin-top:1rem;font-size:.62rem;color:rgba(245,240,232,.25);text-align:center">ご相談内容は守秘義務のもと厳密に管理し、第三者への開示は一切行いません。</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">W<span>A</span>GASHI</div>
+    <div class="footer-sub">Wagashi Holdings, Inc. — 和菓子文化継承株式会社</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">会社概要</a>
+    <a href="#">継承塾</a>
+    <a href="#">採用情報</a>
+    <a href="#">IR情報</a>
+    <a href="#">プレスキット</a>
+  </div>
+  <div class="footer-copy">© 2025 WAGASHI Holdings</div>
+</footer>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const loader=document.getElementById('loader');
+    loader.style.transition='opacity .6s ease, transform .6s ease';
+    loader.style.opacity='0';
+    loader.style.transform='translateY(-100%)';
+    setTimeout(()=>{loader.style.display='none';},600);
+    // hero reveal
+    const hero=document.getElementById('hero');
+    hero.classList.add('revealed');
+  },1600);
+});
+
+// ── CUSTOM CURSOR ──
+const cursor=document.getElementById('cursor');
+const ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('a,button,.brand-card-h').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.classList.add('active');ring.classList.add('active');});
+  el.addEventListener('mouseleave',()=>{cursor.classList.remove('active');ring.classList.remove('active');});
+});
+
+// ── NAV SCROLL ──
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>80);});
+
+// ── SCROLL REVEAL ──
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>io.observe(el));
+
+// ── COUNTER ──
+const counterIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=e.target,target=+el.dataset.target,dur=1600;
+      let start=null;
+      (function tick(ts){
+        if(!start)start=ts;
+        const p=Math.min((ts-start)/dur,1);
+        el.textContent=Math.floor(p*p*(3-2*p)*target);
+        if(p<1)requestAnimationFrame(tick);else el.textContent=target;
+      })(performance.now());
+      counterIO.unobserve(el);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>counterIO.observe(el));
+
+// ── HORIZONTAL DRAG SCROLL ──
+const track=document.getElementById('portfolioTrack');
+let isDragging=false,startX,scrollLeft;
+track.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-track.offsetLeft;scrollLeft=track.parentElement.scrollLeft;track.style.transition='none';});
+document.addEventListener('mouseup',()=>{isDragging=false;});
+document.addEventListener('mousemove',e=>{
+  if(!isDragging)return;
+  e.preventDefault();
+  const x=e.pageX-track.offsetLeft;
+  track.parentElement.scrollLeft=scrollLeft-(x-startX);
+});
+// touch
+track.addEventListener('touchstart',e=>{startX=e.touches[0].pageX;scrollLeft=track.parentElement.scrollLeft;},{passive:true});
+track.addEventListener('touchmove',e=>{
+  const x=e.touches[0].pageX;
+  track.parentElement.scrollLeft=scrollLeft-(x-startX);
+},{passive:true});
+
+// ── FORM ──
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=document.getElementById('submit-btn');
+  btn.textContent='✓ 送信完了。3営業日以内にご連絡します。';
+  btn.style.background='#5A6B52';btn.disabled=true;
+}
+</script>
+</body>
+</html>
